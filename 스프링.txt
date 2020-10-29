@@ -1,0 +1,71 @@
+스프링 설계 철학
+
+-> 모든레벨에서 제공한다.
+디비, 웹소켓, 등등 모든 레벨.
+
+->다양한 관점에서 
+정해진 개발관점으로 개발되지 않는다. -> j2ee 에서는 정해져있기 때문에 어려웠지만 스프링은 자유롭다.
+
+->하위 호환성에대해 강력함
+
+->api 디자인에대해 신경썼다.
+
+->코드 퀄리티에대해서도 신경 썼다.
+
+
+✔스프링 프레임워크 코어
+
+IOC Container
+	Inversion of Control -> 제어의 역전을 구현한 프레임 워크이다.
+			      ApplicaitionContext 는 ioc에서 중요한 부분이다.
+			      이 것을 통해 스프링 프레임워크가 동작한다.
+			      우리가 만든 POJO 객체를 스프링 컨터에너가
+			      우리가 설정한 설정에 따라 객체를 만들어준다.
+			      그리고 객체를 관리하는 부분이 바로 "컨테이너"이다.
+
+	Bean		->   같은 클래스를 사용하는 서로다른빈은 생성해도 같은 객체가 아니다.
+			      같은 빈으로 여러 객체를 만들면 전부다 동일한 객체이다.(default singleton)
+
+			      IOC가 관리하는 POJO객체들.
+			      3가지 방법으로 생성가능 (xml 기준)
+			      1. 객체클래스의 기본 생성자를 사용
+			      2. 객체클래스 내부의 static Factory method를 사용
+			      3. 객체클래스를 생성하는 외부 빈에서 instance Factory method를 사용.
+
+		BeanScopes			✌빈의 종류
+						
+						대표적으로 2가지가 많이 쓰인다.
+						singleton 과 prototype(default는 singleton이고 둘중에서도 거의 singleton만 쓴다.)
+						singleton은 단 하나의 힙메모리에 있는 객체를 여러변수에 할당해주는 스코프이다.
+						prototype은 같은 객체를 여러개 생성하는 빈 스코프이다.
+
+	DI		->   의존성은 클래스들간의 의존을 의미한다.
+			      의존성 주입: A객체에 B객체를 주입한다. 복잡도를 떨어뜨리게 된다.
+			      의존성 주입방법은 2가지가 있따.
+			      생성자 주입 방법 / Setter메서드 주입 방법
+			      생성자 주입 방법은 처음 딱 생성될때 관계를 맺어주고 변경할 일 이없을 때
+			      Setter 주입 방법은 런타임 중 변경할 사항이있을 때
+			      대개 처음 관계가 맺어지면 변경할 일 이없기 때문에 
+			      생성자 주입방법을 스프링에서는 권장한다. 
+			      이런 원칙을 관리하는 곳이 위에서 설명한 IOC Container이다.
+
+			      그리고 상호참조의 경우 허용되지 않는다.
+
+		Dependencis	->
+						✌생성자 주입 방법
+
+						<bean id="dao" class="kr.co.fastcampus.cli.Dao">
+   							<constructor-arg ref="connection" /> : 생성자의 파라미터로 넘길 객체를 주입
+					   	</bean>
+   	
+   							<!-- 
+						   	lazy-init: 컨테이너가 실행되는 시점이아닌 빈이 사용되는 시점에 빈을 생성(객체 생성)
+						   	atuowire: 자동적으로 의존성을 주입(xml 설정에서는 사용 비추한다. 명시적으로 해준다.)
+						   	  -->
+					   	<bean id="dao2" class="kr.co.fastcampus.cli.Dao2"> 
+					   		<constructor-arg ref="connection" />
+					   	</bean>
+
+
+
+

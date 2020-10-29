@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+        
+    <!-- <bean id="dao" class="kr.co.fastcampus.cli.Dao" factory-method="createDao" /> 		static Factory method -->
+    
+    <bean id="connectionFactory" class="kr.co.fastcampus.cli.ConnectionFactory">
+    	<constructor-arg name="driverClass" value="org.h2.Driver" />
+    	<constructor-arg name="url" value="jdbc:h2:mem:test;MODE=MySQL;"/>
+    	<constructor-arg name="user" value="sa"/>
+    	<constructor-arg name="password" value=""/>
+    </bean>      			 <!-- instance Factory method -->
+    			
+    <bean id="connection" class="java.sql.Connection" 
+    	factory-bean="connectionFactory"
+    	factory-method="createConnection"
+    />
+    			
+   	<bean id="dao" class="kr.co.fastcampus.cli.Dao">
+   		<constructor-arg ref="connection" />
+   	</bean>
+   	
+   	<!-- 
+   	lazy-init: 컨테이너가 실행되는 시점이아닌 빈이 사용되는 시점에 빈을 생성(객체 생성)
+   	atuowire: 자동적으로 의존성을 주입(xml 설정에서는 사용 비추한다. 명시적으로 해준다.)
+   	  -->
+   	<bean id="dao2" class="kr.co.fastcampus.cli.Dao2"> 
+   		<constructor-arg ref="connection" />
+   	</bean>
+    
+</beans>
